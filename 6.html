@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SnipHunt - مكتبة الأكواد البرمجية</title>
+    <link rel="icon" href="a123.icon.jpg">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+         :root {
+            --primary-color: #3a7bd5;
+            --secondary-color: #00d2ff;
+            --dark-color: #2c3e50;
+            --light-color: #f8f9fa;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #fd7e14;
+            --python-color: #3776ab;
+            --javascript-color: #f7df1e;
+            --cpp-color: #00599c;
+            --java-color: #007396;
+            --php-color: #777bb4;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark-color);
+            font-family: 'Tajawal', Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 1.5rem 0;
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        
+        header::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--primary-color));
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 18px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+        }
+        
+        .languages {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .lang-btn {
+            background: white;
+            color: var(--dark-color);
+            border: 2px solid #e0e0e0;
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .lang-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            z-index: -1;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+        }
+        
+        .lang-btn:hover,
+        .lang-btn.active {
+            color: white;
+            border-color: transparent;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .lang-btn:hover::before,
+        .lang-btn.active::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        
+        .lang-btn.python.active,
+        .lang-btn.python:hover {
+            background: var(--python-color);
+        }
+        
+        .lang-btn.javascript.active,
+        .lang-btn.javascript:hover {
+            background: var(--javascript-color);
+            color: #000;
+        }
+        
+        .lang-btn.cpp.active,
+        .lang-btn.cpp:hover {
+            background: var(--cpp-color);
+        }
+        
+        .lang-btn.java.active,
+        .lang-btn.java:hover {
+            background: var(--java-color);
+        }
+        
+        .lang-btn.php.active,
+        .lang-btn.php:hover {
+            background: var(--php-color);
+        }
+        
+        .search-box {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            border: 2px solid #e0e0e0;
+            font-size: 1rem;
+            background: white;
+            color: var(--dark-color);
+            transition: all 0.3s ease;
+            padding-right: 3.5rem;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(58, 123, 213, 0.2);
+        }
+        
+        .search-box button {
+            position: absolute;
+            left: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 0.5rem 1.2rem;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .search-box button:hover {
+            transform: translateY(-50%) scale(1.05);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .codes-list {
+            margin-top: 2rem;
+        }
+        
+        .code-card {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary-color);
+            position: relative;
+        }
+        
+        .code-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+        
+        .code-card.python {
+            border-left-color: var(--python-color);
+        }
+        
+        .code-card.javascript {
+            border-left-color: var(--javascript-color);
+        }
+        
+        .code-card.cpp {
+            border-left-color: var(--cpp-color);
+        }
+        
+        .code-card.java {
+            border-left-color: var(--java-color);
+        }
+        
+        .code-card.php {
+            border-left-color: var(--php-color);
+        }
+        
+        .code-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+            font-weight: 700;
+        }
+        
+        .code-desc {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: #555;
+        }
+        
+        pre {
+            background: #f8f9fa;
+            color: #333;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            direction: ltr;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            font-family: 'Courier New', Courier, monospace;
+            border: 1px solid #e0e0e0;
+            position: relative;
+        }
+        
+        pre::before {
+            content: attr(data-lang);
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: var(--dark-color);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.8rem;
+            border-radius: 0 0 4px 0;
+            font-family: 'Tajawal', Arial, sans-serif;
+        }
+        /* AI Assistant styles */
+        
+        .ai-assistant {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            z-index: 100;
+        }
+        
+        .ai-toggle {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .ai-toggle:hover {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        #ai-modal {
+            display: none;
+            position: fixed;
+            bottom: 5.5rem;
+            left: 2rem;
+            width: 370px;
+            max-width: 95vw;
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            z-index: 200;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+        
+        #ai-modal header {
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            text-align: center;
+            font-size: 1.2rem;
+            color: white;
+            font-weight: 500;
+            position: relative;
+        }
+        
+        #ai-messages {
+            padding: 1rem;
+            height: 300px;
+            overflow-y: auto;
+            font-size: 0.95rem;
+            background: #f8f9fa;
+        }
+        
+        .ai-message {
+            margin-bottom: 1rem;
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            max-width: 80%;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .user-message {
+            background: var(--primary-color);
+            color: white;
+            margin-right: auto;
+            margin-left: 0;
+            border-radius: 12px 12px 0 12px;
+        }
+        
+        .bot-message {
+            background: white;
+            color: var(--dark-color);
+            margin-left: auto;
+            margin-right: 0;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px 12px 12px 0;
+        }
+        
+        #ai-modal form {
+            display: flex;
+            padding: 0.8rem;
+            border-top: 1px solid #e0e0e0;
+            background: white;
+        }
+        
+        #ai-input {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 50px;
+            border: 1px solid #e0e0e0;
+            font-size: 1rem;
+            background: white;
+            color: var(--dark-color);
+            margin-left: 0.5rem;
+        }
+        
+        #ai-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        #ai-modal button[type="submit"] {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        #ai-modal button[type="submit"]:hover {
+            transform: scale(1.05);
+        }
+        
+        .close-btn {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .close-btn:hover {
+            transform: translateY(-50%) scale(1.2);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .contact-info {
+            margin-top: 1rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            font-size: 1.2rem;
+        }
+        
+        .no-results i {
+            font-size: 3rem;
+            color: #ddd;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .language-switcher {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            z-index: 10;
+        }
+        
+        .lang-switch-btn {
+            background: white;
+            border: 1px solid #e0e0e0;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-switch-btn:hover {
+            background: #f0f0f0;
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                font-size: 1.8rem;
+                padding: 1.2rem 0;
+            }
+            .container {
+                padding: 1.5rem;
+                margin: 1rem;
+                border-radius: 12px;
+            }
+            .lang-btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 1rem;
+            }
+            .code-card {
+                padding: 1rem;
+            }
+            .code-title {
+                font-size: 1.1rem;
+            }
+            #ai-modal {
+                width: 90vw;
+                left: 5vw;
+                bottom: 5rem;
+            }
+            .ai-toggle {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+                bottom: 1.5rem;
+                left: 1.5rem;
+            }
+        }
+        /* Animation for code cards */
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .code-card {
+            animation: slideIn 0.4s ease forwards;
+            opacity: 0;
+        }
+        
+        .code-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+        
+        .code-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .code-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+        
+        .code-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+        
+        .code-card:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+        
+        .code-card:nth-child(n+6) {
+            animation-delay: 0.6s;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="language-switcher">
+        <button class="lang-switch-btn" onclick="switchLanguage('ar')">العربية</button>
+        <button class="lang-switch-btn" onclick="switchLanguage('en')">English</button>
+    </div>
+
+    <header id="header-title">SnipHunt - مكتبة الأكواد البرمجية</header>
+
+    <div class="container">
+        <div class="languages" id="languages"></div>
+        <div class="search-box">
+            <input type="text" id="search" placeholder="ابحث عن كود أو دلي أو جزء من الكود...">
+            <button onclick="searchCodes()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path
+                        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                </svg>
+            </button>
+        </div>
+        <div class="codes-list" id="codes-list"></div>
+    </div>
+
+    <div class="ai-assistant">
+        <button class="ai-toggle" onclick="toggleAIModal()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                <path
+                    d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0zM8.5 4.5a.5.5 0 0 1 0-1h5a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0V5.707l-4.146 4.147a.5.5 0 0 1-.708-.708L12.293 5H8.5z" />
+            </svg>
+        </button>
+        <div id="ai-modal">
+            <header>
+                <button class="close-btn" onclick="toggleAIModal()">✖</button>
+                <span id="ai-title">مساعد الأكواد الذكي</span>
+            </header>
+            <div id="ai-messages">
+                <div class="ai-message bot-message" id="welcome-message">
+                    مرحباً! أنا مساعدك الذكي لمساعدتك في العثور على الأكواد البرمجية. كيف يمكنني مساعدتك اليوم؟
+                </div>
+            </div>
+            <form onsubmit="sendAIMessage(event)">
+                <input id="ai-input" type="text" placeholder="اسأل عن أي كود برمجي..." autocomplete="off">
+                <button type="submit" id="ai-send-btn">إرسال</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div>SnipHunt &copy; 2025 - جميع الحقوق محفوظة</div>
+        <div class="contact-info">للتواصل عبر واتساب: <a href="https://wa.me/201009684890">01009684890</a></div>
+    </footer>
+
+    <script>
+        // متغيرات اللغة
+        const translations = {
+            ar: {
+                title: "SnipHunt - مكتبة الأكواد البرمجية",
+                searchPlaceholder: "ابحث عن كود أو دلي أو جزء من الكود...",
+                noResults: "لا توجد نتائج مطابقة للبحث",
+                aiTitle: "مساعد الأكواد الذكي",
+                aiWelcome: "مرحباً! أنا مساعدك الذكي لمساعدتك في العثور على الأكواد البرمجية. كيف يمكنني مساعدتك اليوم؟",
+                aiPlaceholder: "اسأل عن أي كود برمجي...",
+                sendButton: "إرسال",
+                footer: "SnipHunt &copy; 2025 - جميع الحقوق محفوظة",
+                contact: "للتواصل عبر واتساب:",
+                languages: {
+                    "بايثون": "بايثون",
+                    "جافاسكريبت": "جافاسكريبت",
+                    "C++": "C++",
+                    "جافا": "جافا",
+                    "PHP": "PHP"
+                }
+            },
+            en: {
+                title: "SnipHunt - Code Library",
+                searchPlaceholder: "Search for code, guide or code snippet...",
+                noResults: "No matching results found",
+                aiTitle: "AI Code Assistant",
+                aiWelcome: "Hello! I'm your AI assistant to help you find code snippets. How can I help you today?",
+                aiPlaceholder: "Ask about any code...",
+                sendButton: "Send",
+                footer: "SnipHunt &copy; 2025 - All Rights Reserved",
+                contact: "Contact via WhatsApp:",
+                languages: {
+                    "بايثون": "Python",
+                    "جافاسكريبت": "JavaScript",
+                    "C++": "C++",
+                    "جافا": "Java",
+                    "PHP": "PHP"
+                }
+            }
+        };
+
+        let currentLanguage = 'ar';
+
+        // وظيفة تبديل اللغة
+        function switchLanguage(lang) {
+            currentLanguage = lang;
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+            // تحديث النصوص حسب اللغة
+            document.getElementById('header-title').textContent = translations[lang].title;
+            document.getElementById('search').placeholder = translations[lang].searchPlaceholder;
+            document.getElementById('ai-title').textContent = translations[lang].aiTitle;
+            document.getElementById('welcome-message').textContent = translations[lang].aiWelcome;
+            document.getElementById('ai-input').placeholder = translations[lang].aiPlaceholder;
+            document.getElementById('ai-send-btn').textContent = translations[lang].sendButton;
+            document.querySelector('footer div:first-child').textContent = translations[lang].footer;
+            document.querySelector('.contact-info').innerHTML = `${translations[lang].contact} <a href="https://wa.me/201009684890">01009684890</a>`;
+
+            // إعادة عرض اللغات مع الترجمة الجديدة
+            renderLanguages();
+        }
+
+        // أكواد متنوعة ومفيدة لكل لغة (70 كود لكل لغة)
+        function generateCodes(lang, desc, templates) {
+            return Array.from({
+                length: 70
+            }, (_, i) => ({
+                title: templates[i % templates.length].title + ` (${i + 1})`,
+                desc: desc + " " + templates[i % templates.length].desc,
+                code: templates[i % templates.length].code.replace(/\{n\}/g, i + 1),
+                lang: lang
+            }));
+        }
+
+        const pythonTemplates = [{
+            title: "طباعة نص",
+            desc: "طباعة نص على الشاشة.",
+            code: "print('Hello World {n}')"
+        }, {
+            title: "جمع رقمين",
+            desc: "جمع متغيرين.",
+            code: "a = {n}\nb = {n}+1\nprint(a + b)"
+        }, {
+            title: "حساب المضروب",
+            desc: "دالة لحساب المضروب.",
+            code: "def fact(n):\n    return 1 if n==0 else n*fact(n-1)\nprint(fact({n}))"
+        }, {
+            title: "قراءة ملف",
+            desc: "قراءة محتوى ملف نصي.",
+            code: "with open('file.txt', 'r') as f:\n    print(f.read())"
+        }, {
+            title: "قائمة مربعات",
+            desc: "توليد قائمة مربعات الأرقام.",
+            code: "squares = [x**2 for x in range({n})]\nprint(squares)"
+        }, {
+            title: "استخدام dict",
+            desc: "مثال على dict.",
+            code: "d = {'a': {n}, 'b': {n}+1}\nprint(d)"
+        }, {
+            title: "تكرار نص",
+            desc: "تكرار نص عدة مرات.",
+            code: "print('Hi '*{n})"
+        }];
+
+        const jsTemplates = [{
+            title: "طباعة في الكونسول",
+            desc: "إظهار نص في الكونسول.",
+            code: "console.log('Hello JS {n}');"
+        }, {
+            title: "جمع رقمين",
+            desc: "جمع متغيرين.",
+            code: "let a = {n}, b = {n}+1;\nconsole.log(a + b);"
+        }, {
+            title: "دالة جمع",
+            desc: "تعريف دالة لجمع رقمين.",
+            code: "function sum(a, b) { return a + b; }\nconsole.log(sum({n}, {n}+1));"
+        }, {
+            title: "مصفوفة مربعات",
+            desc: "توليد مصفوفة مربعات.",
+            code: "let arr = Array.from({length: {n}}, (_,i)=>i*i);\nconsole.log(arr);"
+        }, {
+            title: "قراءة قيمة من input",
+            desc: "قراءة قيمة من input.",
+            code: "let val = document.getElementById('input{n}').value;"
+        }, {
+            title: "كائن Object",
+            desc: "مثال على كائن.",
+            code: "let obj = {a: {n}, b: {n}+1};\nconsole.log(obj);"
+        }, {
+            title: "تكرار نص",
+            desc: "تكرار نص.",
+            code: "console.log('Hi '.repeat({n}));"
+        }];
+
+        const cppTemplates = [{
+            title: "طباعة نص",
+            desc: "برنامج يطبع نص.",
+            code: "#include <iostream>\nint main() {\n  std::cout << \"Hello C++ {n}\";\n  return 0;\n}"
+        }, {
+            title: "جمع رقمين",
+            desc: "جمع متغيرين.",
+            code: "#include <iostream>\nint main() {\n  int a = {n}, b = {n}+1;\n  std::cout << a + b;\n  return 0;\n}"
+        }, {
+            title: "مصفوفة مربعات",
+            desc: "مصفوفة مربعات.",
+            code: "#include <iostream>\nint main() {\n  for(int i=0;i<{n};i++) std::cout<<i*i<<\" \";\n  return 0;\n}"
+        }, {
+            title: "دالة جمع",
+            desc: "دالة لجمع رقمين.",
+            code: "int sum(int a, int b) { return a+b; }\nint main() {\n  std::cout << sum({n},{n}+1);\n  return 0;\n}"
+        }, {
+            title: "هيكل struct",
+            desc: "مثال على struct.",
+            code: "struct Point { int x, y; };\nPoint p = {{n}, {n}+1};"
+        }];
+
+        const javaTemplates = [{
+            title: "طباعة نص",
+            desc: "برنامج يطبع نص.",
+            code: "public class Main {\n  public static void main(String[] args) {\n    System.out.println(\"Hello Java {n}\");\n  }\n}"
+        }, {
+            title: "جمع رقمين",
+            desc: "جمع متغيرين.",
+            code: "public class Main {\n  public static void main(String[] args) {\n    int a = {n}, b = {n}+1;\n    System.out.println(a + b);\n  }\n}"
+        }, {
+            title: "مصفوفة مربعات",
+            desc: "مصفوفة مربعات.",
+            code: "for(int i=0;i<{n};i++) System.out.print(i*i+\" \");"
+        }, {
+            title: "دالة جمع",
+            desc: "دالة لجمع رقمين.",
+            code: "int sum(int a, int b) { return a+b; }\nSystem.out.println(sum({n},{n}+1));"
+        }, {
+            title: "كلاس بسيط",
+            desc: "تعريف كلاس.",
+            code: "class Point { int x={n}, y={n}+1; }"
+        }];
+
+        const phpTemplates = [{
+            title: "طباعة نص",
+            desc: "طباعة نص على المتصفح.",
+            code: "<?php\necho 'Hello PHP {n}';\n?>"
+        }, {
+            title: "جمع رقمين",
+            desc: "جمع متغيرين.",
+            code: "<?php\n$a = {n};\n$b = {n}+1;\necho $a + $b;\n?>"
+        }, {
+            title: "دالة جمع",
+            desc: "تعريف دالة لجمع رقمين.",
+            code: "<?php\nfunction sum($a, $b) { return $a + $b; }\necho sum({n}, {n}+1);\n?>"
+        }, {
+            title: "قراءة ملف",
+            desc: "قراءة محتوى ملف.",
+            code: "<?php\n$content = file_get_contents('file.txt');\necho $content;\n?>"
+        }, {
+            title: "مصفوفة مربعات",
+            desc: "مصفوفة مربعات.",
+            code: "<?php\n$arr = array_map(fn($i)=>$i*$i, range(0,{n}-1));\nprint_r($arr);\n?>"
+        }];
+
+        const codes = {
+            "بايثون": generateCodes("بايثون", "كود بايثون.", pythonTemplates),
+            "جافاسكريبت": generateCodes("جافاسكريبت", "كود جافاسكريبت.", jsTemplates),
+            "C++": generateCodes("C++", "كود C++.", cppTemplates),
+            "جافا": generateCodes("جافا", "كود جافا.", javaTemplates),
+            "PHP": generateCodes("PHP", "كود PHP.", phpTemplates)
+        };
+
+        // عرض أزرار اللغات
+        const languagesDiv = document.getElementById('languages');
+        const codesListDiv = document.getElementById('codes-list');
+        const langs = Object.keys(codes);
+        let activeLang = langs[0];
+        let filteredCodes = [];
+
+        function renderLanguages() {
+            languagesDiv.innerHTML = langs.map(lang =>
+                `<button class="lang-btn ${lang === 'بايثون' ? 'python' :
+                    lang === 'جافاسكريبت' ? 'javascript' :
+                        lang === 'C++' ? 'cpp' :
+                            lang === 'جافا' ? 'java' : 'php'}" 
+                    onclick="selectLang('${lang}')">
+                    ${currentLanguage === 'ar' ? lang : translations.en.languages[lang]}
+                </button>`
+            ).join('');
+        }
+
+        function renderCodes(list) {
+            if (list.length === 0) {
+                codesListDiv.innerHTML = `
+                    <div class="no-results">
+                        <i>🔍</i>
+                        <div>${translations[currentLanguage].noResults}</div>
+                    </div>`;
+                return;
+            }
+
+            codesListDiv.innerHTML = list.map(c => {
+                const langClass = activeLang === 'بايثون' ? 'python' :
+                    activeLang === 'جافاسكريبت' ? 'javascript' :
+                    activeLang === 'C++' ? 'cpp' :
+                    activeLang === 'جافا' ? 'java' : 'php';
+                return `
+                <div class="code-card ${langClass}">
+                    <div class="code-title">${c.title}</div>
+                    <div class="code-desc">${c.desc || ""}</div>
+                    <pre data-lang="${activeLang}"><code>${c.code}</code></pre>
+                </div>`;
+            }).join('');
+        }
+
+        function searchCodes() {
+            const q = document.getElementById('search').value.trim().toLowerCase();
+            if (!q) {
+                filteredCodes = codes[activeLang];
+            } else {
+                filteredCodes = codes[activeLang].filter(c =>
+                    c.title.toLowerCase().includes(q) ||
+                    (c.desc && c.desc.toLowerCase().includes(q)) ||
+                    c.code.toLowerCase().includes(q)
+                );
+            }
+            renderCodes(filteredCodes);
+        }
+
+        window.selectLang = function(lang) {
+            activeLang = lang;
+            renderLanguages();
+            document.getElementById('search').value = '';
+            filteredCodes = codes[activeLang];
+            renderCodes(filteredCodes);
+
+            // Scroll to top
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        };
+
+        // أول تحميل
+        renderLanguages();
+        filteredCodes = codes[activeLang];
+        renderCodes(filteredCodes);
+
+        // بحث مباشر عند الكتابة
+        document.getElementById('search').addEventListener('input', searchCodes);
+
+        // AI Assistant functions
+        function toggleAIModal() {
+            const modal = document.getElementById('ai-modal');
+            modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+            if (modal.style.display === 'block') {
+                document.getElementById('ai-input').focus();
+            }
+        }
+
+        function sendAIMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById('ai-input');
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            const messages = document.getElementById('ai-messages');
+            messages.innerHTML += `
+                <div class="ai-message user-message">
+                    ${msg}
+                </div>`;
+            input.value = '';
+
+            // Scroll to bottom
+            messages.scrollTop = messages.scrollHeight;
+
+            // Simulate AI response (in a real app, this would be an API call)
+            setTimeout(() => {
+                const response = generateAIResponse(msg);
+                messages.innerHTML += `
+                    <div class="ai-message bot-message">
+                        ${response}
+                    </div>`;
+                messages.scrollTop = messages.scrollHeight;
+            }, 1000);
+        }
+
+        function generateAIResponse(message) {
+            // This is a simple simulation - in a real app, you would call an AI API
+            const lowerMsg = message.toLowerCase();
+
+            if (lowerMsg.includes("بايثون") || lowerMsg.includes("python")) {
+                return `فيما يلي مثال على كود بايثون:
+<pre><code># ${currentLanguage === 'ar' ? 'مثال على دالة في بايثون' : 'Python function example'}
+def hello(name):
+    print("Hello", name)
+hello("World")</code></pre>`;
+            }
+            // يمكنك إضافة المزيد من الردود الذكية هنا حسب الحاجة
+            return currentLanguage === 'ar' ?
+                "عذراً، لم أجد إجابة مناسبة لسؤالك." :
+                "Sorry, I could not find a suitable answer to your question.";
+        }
+    </script>
